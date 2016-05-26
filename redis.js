@@ -3,8 +3,7 @@
  */
 var redislock = require('redislock') ;
 var client = require('redis').createClient();
-
-var queue = [];
+var queue = require('./queue.js');
 
 var lock   = require('redislock').createLock(client,{
     timeout: 10000,
@@ -21,19 +20,22 @@ exports.getRedisData = function(key,callback){
     console.log('hello !!!!');
     lock.acquire(key, function (err) {
         if(!!err){
-            console.log('redis has been locked!',queue.length);
-            queue.push({
+            console.log('redis has been locked!');
+            var result = queue.enqueue({
                 key :   key,
                 callback    :   callback
             });
+            if(!!result){//queue full
+                callback('full');
+            }
         } else {
-            console.log('redis has been released!',queue.length);
+            console.log('redis has been released!');
             client.get(key, function (err,data) {
                 callback(err,data);
                 lock.release(function () {
-                    if(queue.length > 0){
+                    var obj = queue.unqueue();
+                    if(!!obj){
                         console.log('queue shift!');
-                        var obj = queue.shift();
                         exports.getRedisData(obj.key,obj.callback);
                     }
                 });

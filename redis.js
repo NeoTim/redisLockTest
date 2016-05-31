@@ -17,7 +17,6 @@ var LockReleaseError     = redislock.LockReleaseError;
 var key = "redis-lock:";
 
 exports.getRedisData = function(key,callback){
-    console.log('hello !!!!');
     lock.acquire(key, function (err) {
         if(!!err){
             console.log('redis has been locked!');

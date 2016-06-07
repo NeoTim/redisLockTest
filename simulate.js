@@ -64,7 +64,7 @@ function testRedisLock(){
             url:'http://localhost:4001/testRedisLock',
             form:{
                 id  :   '5747e221fb36bd387e364273',
-                version :   "0.0.0.204"
+                version :   "0.0.0.208"
             }
         }
         , function (err,data) {
@@ -75,4 +75,24 @@ function testRedisLock(){
         });
 }
 
-testRedisLock();
+//testRedisLock();
+
+function getPvpPlayer(){
+    request.post(
+        {
+            url:'http://localhost:4001/getPvpPlayer',
+            form:{
+                id  :   '57512a9ef55b664ea2de3c60',
+                version :   "0.0.0.223",
+                type:2
+            }
+        }
+        , function (err,data) {
+            console.log(Date.now() + '',err);
+            if(!!data){
+                console.log('data->',data.body);
+            }
+        });
+}
+
+getPvpPlayer();

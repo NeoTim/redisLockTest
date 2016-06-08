@@ -2,7 +2,7 @@
 
 ```javascript
 //redis.js
-var redis = require('redis);
+var redis = require('redis');
 var redislock = require('redislock');
 var client = redis.createClient('127.0.0.1',6379);
 ```

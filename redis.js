@@ -6,28 +6,28 @@ var client = require('redis').createClient();
 var queue = require('./queue.js');
 var _ = require('underscore');
 
-var lock   = redislock.createLock(client);
 
 var LockAcquisitionError = redislock.LockAcquisitionError;
 var LockReleaseError     = redislock.LockReleaseError;
 
 exports.test = function (callback) {
-    lock.acquire('test', function(err1) {
+    var lock   = redislock.createLock(client);
+
+    lock.acquire('test:lock', function(err1) {
         // if (err) ... Failed to acquire the lock
         console.log(err1);
-        var value = {id:1,name:'xiaodong'};
-        client.set('test',JSON.stringify(value), function (err) {
-            console.log(err);
+            console.log('lock->',lock);
             lock.release(function (error1) {
-                console.log(error1);
-                callback(err);
+                console.log('error1==>>',error1);
+                callback();
             });
-        });
     });
 }
 
 exports.getRedisData = function(key,callback){
-    lock.acquire(key+'lock', function (err) {
+    var lock   = redislock.createLock(client);
+
+    lock.acquire(key+':lock', function (err) {
         if(!!err){
             callback(err);
             return;
@@ -93,3 +93,16 @@ exports.redisZAddSets = function(key,sets,callback){
     });
 }
 
+
+exports.lockPlayer = function(key, callback){
+    var playerlock = redislock.createLock(client);
+    playerlock.acquire(key+":lock", function (err) {
+        callback(err,playerlock);
+    });
+}
+
+exports.releasePlayerLock = function(playerlock,callback){
+    playerlock.release(function (err) {
+        callback(err);
+    })
+}

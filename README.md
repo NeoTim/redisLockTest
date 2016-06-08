@@ -1,5 +1,6 @@
 # redisLockTest
-`
+
+```javascript
 //redis.js
 var redis = require('redis);
 var redislock = require('redislock');
@@ -106,4 +107,4 @@ async.waterfall([
         console.log('lock and release lock success!!');
     }
 });
-`
+```

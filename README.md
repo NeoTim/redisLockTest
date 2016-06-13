@@ -1,4 +1,3 @@
-# redisLockTest
 
 ```javascript
 //redis.js
@@ -32,7 +31,7 @@ var async = require('async');
 ```
 
 ```javascript
-//1
+//1 默认10秒的有效时间 过期 则释放锁
 var playlock ;
 async.waterfall([
     function (cb) {
@@ -45,7 +44,7 @@ async.waterfall([
         });
     },
     function (cb) {
-        setTimeout(function () {
+        setTimeout(function () {//可以拿到锁 超过10秒了
             redisUtil.lockPlayer('lock_xiaodong', function (err,data) {
                 console.log('lock player error1:',err);//null
                 if(!err && !!data){
@@ -85,7 +84,7 @@ async.waterfall([
         });
     },
     function (cb) {
-        //error cannot acquire
+        //error cannot acquire 不可以获取锁 因为已经被锁定了
         redisUtil.lockPlayer('lock_xiaodong', function (err,data) {
             console.log('lock player error1:',err);
             if(!err && !!data){

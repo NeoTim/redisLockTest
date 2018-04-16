@@ -114,3 +114,6 @@ async.waterfall([
     }
 });
 ```
+
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/NextZeus/redisLockTest.svg)](https://greenkeeper.io/)
